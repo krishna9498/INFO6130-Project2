@@ -1,71 +1,56 @@
-apply plugin: 'com.android.application'
-
-apply plugin: 'kotlin-android'
-
-apply plugin: 'kotlin-android-extensions'
+plugins {
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
+}
 
 android {
-    compileSdkVersion 32
-    buildToolsVersion rootProject.buildToolsVersion
+    namespace 'com.example.android.testing.espresso.BasicSample'
+    compileSdk 33
+
     defaultConfig {
         applicationId "com.example.android.testing.espresso.BasicSample"
-        minSdkVersion 14
-        targetSdkVersion 32
+        minSdk 23
+        targetSdk 33
         versionCode 1
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
-    lintOptions {
-        abortOnError false
-    }
-    productFlavors {
-    }
-    testOptions {
-        unitTests {
-            includeAndroidResources = true
-        }
-        managedDevices {
-            devices {
 
-                // run with ../gradlew  nexusOneApi30DebugAndroidTest
-                nexusOneApi30(com.android.build.api.dsl.ManagedVirtualDevice) {
-                    // A lower resolution device is used here for better emulator performance
-                    device = "Nexus One"
-                    apiLevel = 30
-                    // Also use the AOSP ATD image for better emulator performance
-                    systemImageSource = "aosp-atd"
-                }
-            }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
-}
 
-tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
+    }
+
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = '11'
+    }
+
+    buildFeatures {
+        viewBinding true
     }
 }
 
 dependencies {
     // App dependencies
-    implementation 'androidx.annotation:annotation:' + rootProject.androidxAnnotationVersion;
-    implementation 'com.google.guava:guava:' + rootProject.guavaVersion
+    implementation 'com.google.guava:guava:31.1-android'
+    implementation 'androidx.core:core-ktx:1.10.0'
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'com.google.android.material:material:1.8.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation 'com.google.android.gms:play-services-basement:18.9.0'
 
-    // Testing-only dependencies
-    androidTestImplementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
-    androidTestImplementation 'androidx.test:core:' + rootProject.coreVersion
-    androidTestImplementation 'androidx.test:core-ktx:' + rootProject.coreVersion
-    androidTestImplementation 'androidx.test.ext:junit:' + rootProject.extJUnitVersion
-    androidTestImplementation 'androidx.test.ext:junit-ktx:' + rootProject.extJUnitVersion
-    androidTestImplementation 'androidx.test:runner:' + rootProject.runnerVersion
-    androidTestImplementation 'androidx.test.espresso:espresso-core:' + rootProject.espressoVersion
+    // Testing dependencies
+    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+    androidTestImplementation 'androidx.test:runner:1.5.2'
 
-    testImplementation 'androidx.test:core:' + rootProject.coreVersion;
-    testImplementation 'androidx.test.ext:junit:' + rootProject.extJUnitVersion
-    testImplementation 'junit:junit:4.12'
-    testImplementation 'org.robolectric:robolectric:' + rootProject.robolectricVersion
-    testImplementation 'androidx.test.espresso:espresso-core:' + rootProject.espressoVersion
-    testImplementation 'androidx.test.espresso:espresso-intents:' + rootProject.espressoVersion
-    testImplementation 'androidx.test.ext:truth:' + rootProject.extTruthVersion
+    testImplementation 'junit:junit:4.13.2'
 }
